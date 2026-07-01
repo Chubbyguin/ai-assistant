@@ -5,11 +5,33 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
-    setMessages([...messages, { role: 'user', content: input }]);
+    const newMessages = [...messages, { role: 'user', content: input }];
+    const output = await sendInput(newMessages);
+    setMessages([...newMessages, { role: 'assistant', content: output }]);
     setInput('');
   };
+
+  async function sendInput(input) {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: 
+      {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.REACT_APP_ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1024,
+        messages: input
+      })
+    })
+    const data = await response.json(); 
+    return data.content[0].text;
+  }
 
   return (
     <div className="app">
