@@ -35,6 +35,11 @@ function App() {
 
   return (
     <div className="app">
+      <div className="header">
+        <span className="diamond">♦</span>
+        <span className="name">AZUMI</span>
+        <span className="status">at your service</span>
+      </div>
       <div className="chat-window">
         {messages.map((msg, i) => (
           <div key={i} className={`message ${msg.role}`}>
@@ -47,7 +52,7 @@ function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-          placeholder="Type a message..."
+          placeholder="Speak your mind..."
         />
         <button onClick={sendMessage}>Send</button>
       </div>
